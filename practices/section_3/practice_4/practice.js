@@ -1,31 +1,33 @@
 function create_updated_collection(collection_a, object_b) {
-  var sum={};
- var sum_list=[];
- var test=true;
- for (i=0;i<collection_a.length-1;i++){
-   if(test){
-     sum={key:collection_a[i],count:0};//生成（替换上一条）一条sum数据。
-     test=false;
-   }
-   sum.count=sum.count+1;//统计相同字母的数量。
-   if(collection_a[i]!=collection_a[i+1]){
-     sum_list.push(sum);//将sum数据存入sum_list中。
-     test=true;
-     }
- }
- var letter=collection_a[collection_a.length-1].substring(0, 1);
- var num=parseInt(collection_a[collection_a.length-1].substring(collection_a[collection_a.length-1].length-1));
- var sum1={key:letter,count:num};
- sum_list.push(sum1);
- for(var i=0;i<sum_list.length;i++){
-      for(var k=0;k<object_b.value.length;k++){
-        var x=0;
-           if(sum_list[i].key==object_b.value[k]){
-                     x=  parseInt(sum_list[i].count/3);
-                  sum_list[i].count= sum_list[i].count-x ;
+  var create_array = [];
+
+  for(var i = 0; i < collection_a.length; i ++){
+      var exist = false;
+      var char =collection_a[i].length>2 ? collection_a[i].substring(0, 1) : collection_a[i];
+      var count =collection_a[i].length>2 ? parseInt(collection_a[i].substring(2)) : 1;
+      for(var j = 0; j < create_array.length; j ++){
+          if(create_array[j].key==char){
+              create_array[j].count = create_array[j].count + count;
+              exist = true;
+          }
+      }
+      if(!exist){
+          var add = {};
+          add.key = char;
+          add.count = count;
+          create_array.push(add);
+      }
+  }
+  for(var x = 0;x < create_array.length ; x ++){
+           for(y = 0;y < object_b.value.length; y ++){
+               if(create_array[x].key == object_b.value[y]){
+                   if(create_array[x].count/3>0){
+                       create_array[x].count=create_array[x].count-parseInt(create_array[x].count/3);
+                }
            }
-    }
- }
-     return sum_list;
+       }
+  }
+  return create_array;
 }
+
 module.exports = create_updated_collection;
